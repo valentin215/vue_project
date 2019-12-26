@@ -1,4 +1,1 @@
-# vuejs
-# vuesjs
-# vue_project
-# vue_project
+# project from the course mastery Vue.JS

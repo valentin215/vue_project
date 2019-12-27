@@ -19,6 +19,9 @@
     </div>
     <div class="product-info">
       <h1>{{ product }}</h1>
+      <p v-if="inStock">In Stock</p>
+      <p :class="{ lineThroughClass: !inStock }" v-else>Out of Stock</p>
+
       <a :href="link" target="_blank">More product here</a>
       <div style="margin-top: 20px">
         <span v-if="onSale">On Sale!</span>
@@ -27,8 +30,8 @@
       <ul>
         <li v-for="size in sizes">{{ size }}</li>
       </ul>
-    <button v-on:click="addToCart" class="button" style="border-radius: 4px">Add to cart</button>
-    <button v-on:click="removeToCart" class="button" style="border-radius: 4px">Remove to cart</button>
+    <button v-on:click="addToCart" :class="{ disabledButton: !inStock }" style="border-radius: 4px">Add to cart</button>
+    <button v-on:click="removeToCart" style="border-radius: 4px">Remove to cart</button>
       <div class="cart">
         <p>Cart({{ cart }})</p>
       </div>

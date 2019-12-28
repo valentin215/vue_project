@@ -21,6 +21,7 @@
       <h1>{{ product }}</h1>
       <p v-if="inStock">In Stock</p>
       <p :class="{ lineThroughClass: !inStock }" v-else>Out of Stock</p>
+      <p>{{ sale }}</p>
 
       <a :href="link" target="_blank">More product here</a>
       <div style="margin-top: 20px">

@@ -35,7 +35,6 @@ var product = Vue.component('product', {
       image: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
       link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks',
       selectedVariant: 0,
-      variantQuantity: 0,
       onSale: true,
       inStock: true,
       sizes: ["S", "M", "L", "XL"],
@@ -57,7 +56,7 @@ var product = Vue.component('product', {
   },
   methods: {
     removeToCart() {
-      this.cart.$emit('remove-to-cart', this.variants[this.selectedVariant].variantId)
+      this.$emit('remove-to-cart', this.variants[this.selectedVariant].variantId)
     },
     addToCart() {
       this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)

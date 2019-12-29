@@ -26,9 +26,6 @@ var product = Vue.component('product', {
       </ul>
     <button v-on:click="addToCart" :class="{ disabledButton: !inStock }" style="border-radius: 4px">Add to cart</button>
     <button v-on:click="removeToCart" style="border-radius: 4px">Remove to cart</button>
-      <div class="cart">
-        <p>Cart({{ cart }})</p>
-      </div>
     </div>
   </div>`,
   data() {
@@ -37,18 +34,33 @@ var product = Vue.component('product', {
       product: 'Socks',
       image: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
       link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks',
+      selectedVariant: 0,
+      variantQuantity: 0,
       onSale: true,
       inStock: true,
       sizes: ["S", "M", "L", "XL"],
-      cart: 0
+      variants: [
+            {
+              variantId: 2234,
+              variantColor: 'green',
+              variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
+              variantQuantity: 10
+            },
+            {
+              variantId: 2235,
+              variantColor: 'blue',
+              variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
+              variantQuantity: 0
+            }
+          ],
     }
   },
   methods: {
     removeToCart() {
-      this.cart -= 1
+      this.cart.$emit('remove-to-cart', this.variants[this.selectedVariant].variantId)
     },
     addToCart() {
-      this.cart += 1
+      this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
     },
   },
   computed: {
@@ -64,9 +76,18 @@ var product = Vue.component('product', {
 var app = new Vue({
   el: '#app',
   data: {
-    premium: true
+    premium: true,
+    cart: []
   },
   components: {
     product: product
+  },
+  methods: {
+    updateToCart(id) {
+      this.cart.push(id)
+    },
+    updateLessToCart(id) {
+      this.cart.splice( cart.indexOf(id), 1 )
+    },
   },
 })

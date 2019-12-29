@@ -87,7 +87,11 @@ var app = new Vue({
       this.cart.push(id)
     },
     updateLessToCart(id) {
-      this.cart.splice( cart.indexOf(id), 1 )
-    },
-  },
+      for(var i = this.cart.length - 1; i >= 0; i--) {
+         if (this.cart[i] === id) {
+          this.cart.splice(i, 1);
+        }
+      }
+    }
+  }
 })

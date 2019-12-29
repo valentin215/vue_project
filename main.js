@@ -1,11 +1,4 @@
-var app = new Vue({
-  el: '#app',
-  data: {
-    premium: true,
-  },
-})
-
-Vue.component('product', {
+var product = Vue.component('product', {
   props: {
     premium: {
       type: Boolean,
@@ -68,3 +61,12 @@ Vue.component('product', {
   },
 })
 
+var app = new Vue({
+  el: '#app',
+  data: {
+    premium: true
+  },
+  components: {
+    product: product
+  },
+})

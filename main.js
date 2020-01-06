@@ -75,6 +75,43 @@ var productReview = Vue.component('product-review', {
     }
   })
 
+var productTabs = Vue.component('product-tabs', {
+  props: {
+    reviews: {
+      type: Array,
+      required: true
+    }
+  },
+  template: `
+  <div>
+  <span class="tab"
+        :class="{activeTab: selectedTab === tab}"
+        v-for="(tab, index) in tabs"
+        :key="index"
+        @click="selectedTab = tab"
+        >{{ tab }}</span>
+  </div>
+  <div>
+    <h2>Reviews</h2>
+    <ul>
+      <li v-for="review in reviews">
+        <p> {{ review.name }} </p>
+        <p> {{ review.rating }} </p>
+        <p> {{ review.review }} </p>
+        <p> {{ review.reco }} </p>
+      </li>
+    </ul>
+    </div>
+     <product-review @review-submitted="addReview"></product-review>
+  </div>`,
+  data() {
+    return {
+      tabs: ['reviews', 'Make a Review'],
+      selectedTab: 'Reviews'
+    }
+  }
+})
+
 var product = Vue.component('product', {
   props: {
     premium: {
@@ -104,21 +141,7 @@ var product = Vue.component('product', {
     <button v-on:click="addToCart" :class="{ disabledButton: !inStock }" style="border-radius: 4px">Add to cart</button>
     <button v-on:click="removeToCart" style="border-radius: 4px">Remove to cart</button>
     </div>
-
-    <div>
-    <h2>Reviews</h2>
-    <ul>
-      <li v-for="review in reviews">
-        <p> {{ review.name }} </p>
-        <p> {{ review.rating }} </p>
-        <p> {{ review.review }} </p>
-        <p> {{ review.reco }} </p>
-      </li>
-    </ul>
-    </div>
-
-     <product-review @review-submitted="addReview"></product-review>
-
+    <product-tabs :reviews="reviews"></product-tabs>
   </div>`,
   data() {
     return {
@@ -176,7 +199,8 @@ var app = new Vue({
   },
   components: {
     product: product,
-    productReview: productReview
+    productReview: productReview,
+    productTabs: productTabs
   },
   methods: {
     updateToCart(id) {

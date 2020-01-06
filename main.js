@@ -42,6 +42,10 @@ var productReview = Vue.component('product-review', {
           review: this.review,
           rating: this.rating
         }
+        this.$emit('review-submitted', productReview)
+        this.name = null
+        this.review = null
+        this.rating = null
       }
     }
   })
@@ -76,7 +80,7 @@ var product = Vue.component('product', {
     <button v-on:click="removeToCart" style="border-radius: 4px">Remove to cart</button>
     </div>
 
-     <product-review @review-submitted:"addReview"></product-review>
+     <product-review @review-submitted="addReview"></product-review>
 
   </div>`,
   data() {
@@ -103,6 +107,7 @@ var product = Vue.component('product', {
               variantQuantity: 0
             }
           ],
+          reviews: []
     }
   },
   methods: {
@@ -112,6 +117,9 @@ var product = Vue.component('product', {
     addToCart() {
       this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
     },
+    addRevuew(productReview) {
+      this.reviews.push(productReview)
+    }
   },
   computed: {
     sale() {

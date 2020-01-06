@@ -1,3 +1,5 @@
+var eventBus = new Vue()
+
 var productReview = Vue.component('product-review', {
     template: `
     <form class="review-form" @submit.prevent="onSubmit">
@@ -60,7 +62,7 @@ var productReview = Vue.component('product-review', {
           reco: this.reco,
           rating: this.rating
         }
-        this.$emit('review-submitted', productReview)
+        eventBus.$emit('review-submitted', productReview)
         this.name = null
         this.reco = null
         this.review = null
@@ -90,8 +92,8 @@ var productTabs = Vue.component('product-tabs', {
         :key="index"
         @click="selectedTab = tab"
         >{{ tab }}</span>
-  </div>
-  <div>
+
+  <div v-show="selectedTab === 'Reviews'"">
     <h2>Reviews</h2>
     <ul>
       <li v-for="review in reviews">
@@ -102,8 +104,8 @@ var productTabs = Vue.component('product-tabs', {
       </li>
     </ul>
     </div>
-     <product-review @review-submitted="addReview"></product-review>
-  </div>`,
+     <product-review v-show="selectedTab === 'Make a Review'"></product-review>
+     </div>`,
   data() {
     return {
       tabs: ['reviews', 'Make a Review'],
@@ -177,9 +179,6 @@ var product = Vue.component('product', {
     addToCart() {
       this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
     },
-    addReview(productReview) {
-      this.reviews.push(productReview)
-    }
   },
   computed: {
     sale() {
@@ -189,6 +188,11 @@ var product = Vue.component('product', {
         return this.brand + ' ' + this.product + ' are not on Sale !'
     },
   },
+  mounted() {
+    eventBus.$on('review-submitted', productReview => {
+      this.reviews.push(productReview)
+    })
+  }
 })
 
 var app = new Vue({

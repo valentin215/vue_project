@@ -1,6 +1,13 @@
 var productReview = Vue.component('product-review', {
     template: `
     <form class="review-form" @submit.prevent="onSubmit">
+
+      <p v-if="errors.length">
+        <b>Please corrert the errors:</b>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+      </p>
       <p>
         <label for="name">Name:</label>
         <input id="name" v-model="name" placeholder="name">
@@ -22,6 +29,13 @@ var productReview = Vue.component('product-review', {
         </select>
       </p>
 
+      <p>Would your recommend this product ?</p>
+        <label>Yes
+        <input type="radio" v-model="reco" value="Yes">
+        </label>
+        <label>No
+        <input type="radio" v-model="reco" value="No">
+        </label>
       <p>
         <input type="submit" value="Submit">
       </p>
@@ -32,21 +46,32 @@ var productReview = Vue.component('product-review', {
       return {
         name: null,
         review: null,
-        rating: null
+        rating: null,
+        reco: null,
+        errors: []
       }
     },
     methods: {
       onSubmit() {
-        let productReview = {
+        if (this.name && this.review && this.rating) {
+          let productReview = {
           name: this.name,
           review: this.review,
+          reco: this.reco,
           rating: this.rating
         }
         this.$emit('review-submitted', productReview)
         this.name = null
+        this.reco = null
         this.review = null
         this.rating = null
       }
+      else {
+        if(!this.name) this.erros.push("Name required.")
+        if(!this.review) this.erros.push("Name required.")
+        if(!this.rating) this.erros.push("Name required.")
+      }
+     }
     }
   })
 
@@ -78,6 +103,17 @@ var product = Vue.component('product', {
       </ul>
     <button v-on:click="addToCart" :class="{ disabledButton: !inStock }" style="border-radius: 4px">Add to cart</button>
     <button v-on:click="removeToCart" style="border-radius: 4px">Remove to cart</button>
+    </div>
+
+    <div>
+    <h2>Reviews</h2>
+    <ul>
+      <li v-for="review in reviews">
+        <p> {{ review.name }} </p>
+        <p> {{ review.rating }} </p>
+        <p> {{ reviewreview }} </p>
+      </li>
+    </ul>
     </div>
 
      <product-review @review-submitted="addReview"></product-review>
@@ -117,7 +153,7 @@ var product = Vue.component('product', {
     addToCart() {
       this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
     },
-    addRevuew(productReview) {
+    addReview(productReview) {
       this.reviews.push(productReview)
     }
   },
